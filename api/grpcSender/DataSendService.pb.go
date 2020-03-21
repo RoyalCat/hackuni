@@ -6,12 +6,11 @@ package grpcSender
 import (
 	context "context"
 	fmt "fmt"
-	math "math"
-
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -25,79 +24,80 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type DataRequest struct {
-	Data                 []float32 `protobuf:"fixed32,1,rep,packed,name=data,proto3" json:"data,omitempty"`
+type Enter struct {
+	//The Ping message
+	Message              []float32 `protobuf:"fixed32,1,rep,packed,name=message,proto3" json:"message,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_unrecognized     []byte    `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
 
-func (m *DataRequest) Reset()         { *m = DataRequest{} }
-func (m *DataRequest) String() string { return proto.CompactTextString(m) }
-func (*DataRequest) ProtoMessage()    {}
-func (*DataRequest) Descriptor() ([]byte, []int) {
+func (m *Enter) Reset()         { *m = Enter{} }
+func (m *Enter) String() string { return proto.CompactTextString(m) }
+func (*Enter) ProtoMessage()    {}
+func (*Enter) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df875e890922d343, []int{0}
 }
 
-func (m *DataRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DataRequest.Unmarshal(m, b)
+func (m *Enter) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Enter.Unmarshal(m, b)
 }
-func (m *DataRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DataRequest.Marshal(b, m, deterministic)
+func (m *Enter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Enter.Marshal(b, m, deterministic)
 }
-func (m *DataRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DataRequest.Merge(m, src)
+func (m *Enter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Enter.Merge(m, src)
 }
-func (m *DataRequest) XXX_Size() int {
-	return xxx_messageInfo_DataRequest.Size(m)
+func (m *Enter) XXX_Size() int {
+	return xxx_messageInfo_Enter.Size(m)
 }
-func (m *DataRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_DataRequest.DiscardUnknown(m)
+func (m *Enter) XXX_DiscardUnknown() {
+	xxx_messageInfo_Enter.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_DataRequest proto.InternalMessageInfo
+var xxx_messageInfo_Enter proto.InternalMessageInfo
 
-func (m *DataRequest) GetData() []float32 {
+func (m *Enter) GetMessage() []float32 {
 	if m != nil {
-		return m.Data
+		return m.Message
 	}
 	return nil
 }
 
-type DataResponse struct {
+type Out struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *DataResponse) Reset()         { *m = DataResponse{} }
-func (m *DataResponse) String() string { return proto.CompactTextString(m) }
-func (*DataResponse) ProtoMessage()    {}
-func (*DataResponse) Descriptor() ([]byte, []int) {
+func (m *Out) Reset()         { *m = Out{} }
+func (m *Out) String() string { return proto.CompactTextString(m) }
+func (*Out) ProtoMessage()    {}
+func (*Out) Descriptor() ([]byte, []int) {
 	return fileDescriptor_df875e890922d343, []int{1}
 }
 
-func (m *DataResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DataResponse.Unmarshal(m, b)
+func (m *Out) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Out.Unmarshal(m, b)
 }
-func (m *DataResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DataResponse.Marshal(b, m, deterministic)
+func (m *Out) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Out.Marshal(b, m, deterministic)
 }
-func (m *DataResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DataResponse.Merge(m, src)
+func (m *Out) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Out.Merge(m, src)
 }
-func (m *DataResponse) XXX_Size() int {
-	return xxx_messageInfo_DataResponse.Size(m)
+func (m *Out) XXX_Size() int {
+	return xxx_messageInfo_Out.Size(m)
 }
-func (m *DataResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_DataResponse.DiscardUnknown(m)
+func (m *Out) XXX_DiscardUnknown() {
+	xxx_messageInfo_Out.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_DataResponse proto.InternalMessageInfo
+var xxx_messageInfo_Out proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*DataRequest)(nil), "grpcSender.DataRequest")
-	proto.RegisterType((*DataResponse)(nil), "grpcSender.DataResponse")
+	proto.RegisterType((*Enter)(nil), "Enter")
+	proto.RegisterType((*Out)(nil), "Out")
 }
 
 func init() {
@@ -105,16 +105,16 @@ func init() {
 }
 
 var fileDescriptor_df875e890922d343 = []byte{
-	// 140 bytes of a gzipped FileDescriptorProto
+	// 133 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x75, 0x49, 0x2c, 0x49,
 	0x0c, 0x4e, 0xcd, 0x4b, 0x09, 0x4e, 0x2d, 0x2a, 0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28, 0xca, 0x2f,
-	0xc9, 0x17, 0xe2, 0x4a, 0x2f, 0x2a, 0x48, 0x06, 0x09, 0xa7, 0x16, 0x29, 0x29, 0x72, 0x71, 0x83,
-	0x14, 0x05, 0xa5, 0x16, 0x96, 0xa6, 0x16, 0x97, 0x08, 0x09, 0x71, 0xb1, 0xa4, 0x24, 0x96, 0x24,
-	0x4a, 0x30, 0x2a, 0x30, 0x6b, 0x30, 0x05, 0x81, 0xd9, 0x4a, 0x7c, 0x5c, 0x3c, 0x10, 0x25, 0xc5,
-	0x05, 0xf9, 0x79, 0xc5, 0xa9, 0x46, 0x41, 0x5c, 0xfc, 0x68, 0xe6, 0x0a, 0xd9, 0x73, 0x71, 0x80,
-	0xb8, 0x20, 0x61, 0x21, 0x71, 0x3d, 0x84, 0xf1, 0x7a, 0x48, 0x66, 0x4b, 0x49, 0x60, 0x4a, 0x40,
-	0x4c, 0x54, 0x62, 0x70, 0xe2, 0x89, 0x42, 0x72, 0x54, 0x12, 0x1b, 0xd8, 0x9d, 0xc6, 0x80, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0xe0, 0x8c, 0xcf, 0x30, 0xc0, 0x00, 0x00, 0x00,
+	0xc9, 0x57, 0x52, 0xe4, 0x62, 0x75, 0xcd, 0x2b, 0x49, 0x2d, 0x12, 0x92, 0xe0, 0x62, 0xcf, 0x4d,
+	0x2d, 0x2e, 0x4e, 0x4c, 0x4f, 0x95, 0x60, 0x54, 0x60, 0xd6, 0x60, 0x0a, 0x82, 0x71, 0x95, 0x58,
+	0xb9, 0x98, 0xfd, 0x4b, 0x4b, 0x8c, 0xb4, 0xb9, 0xf8, 0x1c, 0xf3, 0x12, 0x73, 0x2a, 0x8b, 0x4b,
+	0xa0, 0x26, 0x08, 0x49, 0x72, 0xb1, 0x43, 0x44, 0x52, 0x85, 0xd8, 0xf4, 0xc0, 0xa6, 0x48, 0xb1,
+	0xe8, 0xf9, 0x97, 0x96, 0x28, 0x31, 0x38, 0xf1, 0x44, 0x71, 0xa5, 0x17, 0x15, 0x24, 0x83, 0xec,
+	0x4b, 0x2d, 0x4a, 0x62, 0x03, 0xdb, 0x65, 0x0c, 0x08, 0x00, 0x00, 0xff, 0xff, 0xe5, 0xe0, 0xe4,
+	0xef, 0x84, 0x00, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -125,72 +125,74 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// DataSendServiceClient is the client API for DataSendService service.
+// AnalystServiceClient is the client API for AnalystService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type DataSendServiceClient interface {
-	SendData(ctx context.Context, in *DataRequest, opts ...grpc.CallOption) (*DataResponse, error)
+type AnalystServiceClient interface {
+	//an example of getting a feature
+	Analyse(ctx context.Context, in *Enter, opts ...grpc.CallOption) (*Out, error)
 }
 
-type dataSendServiceClient struct {
+type analystServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewDataSendServiceClient(cc grpc.ClientConnInterface) DataSendServiceClient {
-	return &dataSendServiceClient{cc}
+func NewAnalystServiceClient(cc grpc.ClientConnInterface) AnalystServiceClient {
+	return &analystServiceClient{cc}
 }
 
-func (c *dataSendServiceClient) SendData(ctx context.Context, in *DataRequest, opts ...grpc.CallOption) (*DataResponse, error) {
-	out := new(DataResponse)
-	err := c.cc.Invoke(ctx, "/grpcSender.DataSendService/SendData", in, out, opts...)
+func (c *analystServiceClient) Analyse(ctx context.Context, in *Enter, opts ...grpc.CallOption) (*Out, error) {
+	out := new(Out)
+	err := c.cc.Invoke(ctx, "/AnalystService/Analyse", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// DataSendServiceServer is the server API for DataSendService service.
-type DataSendServiceServer interface {
-	SendData(context.Context, *DataRequest) (*DataResponse, error)
+// AnalystServiceServer is the server API for AnalystService service.
+type AnalystServiceServer interface {
+	//an example of getting a feature
+	Analyse(context.Context, *Enter) (*Out, error)
 }
 
-// UnimplementedDataSendServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedDataSendServiceServer struct {
+// UnimplementedAnalystServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedAnalystServiceServer struct {
 }
 
-func (*UnimplementedDataSendServiceServer) SendData(ctx context.Context, req *DataRequest) (*DataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SendData not implemented")
+func (*UnimplementedAnalystServiceServer) Analyse(ctx context.Context, req *Enter) (*Out, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Analyse not implemented")
 }
 
-func RegisterDataSendServiceServer(s *grpc.Server, srv DataSendServiceServer) {
-	s.RegisterService(&_DataSendService_serviceDesc, srv)
+func RegisterAnalystServiceServer(s *grpc.Server, srv AnalystServiceServer) {
+	s.RegisterService(&_AnalystService_serviceDesc, srv)
 }
 
-func _DataSendService_SendData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DataRequest)
+func _AnalystService_Analyse_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Enter)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(DataSendServiceServer).SendData(ctx, in)
+		return srv.(AnalystServiceServer).Analyse(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpcSender.DataSendService/SendData",
+		FullMethod: "/AnalystService/Analyse",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(DataSendServiceServer).SendData(ctx, req.(*DataRequest))
+		return srv.(AnalystServiceServer).Analyse(ctx, req.(*Enter))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _DataSendService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "grpcSender.DataSendService",
-	HandlerType: (*DataSendServiceServer)(nil),
+var _AnalystService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "AnalystService",
+	HandlerType: (*AnalystServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SendData",
-			Handler:    _DataSendService_SendData_Handler,
+			MethodName: "Analyse",
+			Handler:    _AnalystService_Analyse_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -1,15 +1,17 @@
 syntax = "proto3";
 
-package grpcSender;
 option go_package = "grpcSender";
 
-message DataRequest {
-    repeated float data = 1;
+service AnalystService {
+    //an example of getting a feature
+    rpc Analyse (Enter) returns (Out) {}
 }
 
-message DataResponse {
+message Enter {
+    //The Ping message
+    repeated float message = 1;
 }
 
-service DataSendService {
-    rpc SendData(DataRequest) returns (DataResponse) {};
+message Out {
+
 }

@@ -34,20 +34,20 @@ func updateData() {
 	defer sess.Close()
 
 	opts := grpc.WithInsecure()
-	cc, err := grpc.Dial("178.130.44.169:9999", opts)
+	cc, err := grpc.Dial("localhost:9999", opts)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer cc.Close()
 
-	grpcClient := grpcSender.NewDataSendServiceClient(cc)
+	grpcClient := grpcSender.NewAnalystServiceClient(cc)
 
 	for {
 		var data, raw, _ = datalistener.GetData(client)
+		raw = append(raw, float64(data.EventTime.Unix()))
 		dbwriter.PasteData(sess, data)
-		request := &grpcSender.DataRequest{Data: convertTo32(raw)}
-		_, err := grpcClient.SendData(context.Background(), request)
-		print(err)
+		request := &grpcSender.Enter{Message: convertTo32(raw)}
+		grpcClient.Analyse(context.Background(), request)
 		time.Sleep(1 * time.Second)
 	}
 }
