@@ -45,6 +45,7 @@ class Listener(AnalystService_pb2_grpc.AnalystServiceServicer):
         if flag:
             self.client.execute(f'INSERT INTO test.warnings (Pressure, Humidity, TemperatureR, TemperatureA, pH, FlowRate, CO, EventTime) VALUES ({",".join(map(str, result))})')
 
+
         return AnalystService_pb2.Out()
 
 
