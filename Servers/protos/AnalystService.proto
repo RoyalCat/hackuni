@@ -9,7 +9,7 @@ service AnalystService {
 
 message Enter {
     //The Ping message
-    string message = 1;
+    repeated float message = 1;
 }
 
 message Out {
