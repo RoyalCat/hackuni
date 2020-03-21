@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+//python -m grpc_tools.protoc -I./protos --python_out=. --grpc_python_out=. ./protos/AnalystService.proto
+
+service AnalystService {
+    //an example of getting a feature
+    rpc Analyse (Enter) returns (Out) {}
+}
+
+message Enter {
+    //The Ping message
+    string message = 1;
+}
+
+message Out {
+
+}
