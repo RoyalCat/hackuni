@@ -3,5 +3,5 @@ package collector
 import "context"
 
 type Service interface {
-	WaitData(ctx context.Context) (string, error)
+	WaitData(ctx context.Context) (Data, error)
 }
