@@ -1,15 +1,21 @@
-import os
 import time
 from concurrent import futures
-import logging
-import random
-import string
-import threading
 from clickhouse_driver import Client
 import grpc
 import AnalystService_pb2
 import AnalystService_pb2_grpc
+import telebot
+from telebot import apihelper
 
+bot = telebot.TeleBot('1101313253:AAG-3hK95_Ojk6G1yfj_7ogK5NyPjI2AXUk')
+chatids = []
+
+proxies = {
+'http': 'http://52.179.231.206:80',
+'https': 'https://167.172.191.252:8118'
+}
+
+apihelper.proxy = proxies
 
 class Listener(AnalystService_pb2_grpc.AnalystServiceServicer):
     """The listener function implemests the rpc call as described in the .proto file"""
@@ -43,7 +49,10 @@ class Listener(AnalystService_pb2_grpc.AnalystServiceServicer):
         result.append(data[-1])
 
         if flag:
-            self.client.execute(f'INSERT INTO test.warnings (Pressure, Humidity, TemperatureR, TemperatureA, pH, FlowRate, CO,) VALUES ({",".join(result)})')
+            self.client.execute(f'INSERT INTO test.warnings (Pressure, Humidity, TemperatureR, TemperatureA, pH, FlowRate, CO, EventTime) VALUES ({",".join(map(str, result))})')
+            names = ['Pressure', 'Humidity', 'TemperatureR', 'TemperatureA', 'pH', 'FlowRate', 'CO', 'EventTime']
+            for i in chatids:
+                bot.send_message(i, 'Warning on sensors: ' + ",".join(map(str, [names[j] for j in range(len(names)) if result[i] == 1])))
 
         return AnalystService_pb2.Out()
 
@@ -54,12 +63,31 @@ def serve():
     AnalystService_pb2_grpc.add_AnalystServiceServicer_to_server(Listener(), server)
     server.add_insecure_port("[::]:9999")
     server.start()
+    bot.polling()
     try:
         while True:
             pass
     except KeyboardInterrupt:
         print("KeyboardInterrupt  sss")
         server.stop(0)
+
+
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    bot.send_message(message.chat.id, 'Привет, пиши /enable что бы подписаться на рассылку предупреждений,'
+                                      'и /disable для того чтобы отписатся')
+
+
+@bot.message_handler(commands=['enable'])
+def enable(message):
+    chatids.append(message.chat.id)
+    bot.send_message(message.chat.id, 'Подписка оформлена')
+
+
+@bot.message_handler(commands=['disable'])
+def disable(message):
+    chatids.remove(message.chat.id)
+    bot.send_message(message.chat.id, 'Подписка отменена')
 
 
 if __name__ == "__main__":
