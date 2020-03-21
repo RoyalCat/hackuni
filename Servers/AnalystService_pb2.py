@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x14\x41nalystService.proto\"\x18\n\x05\x45nter\x12\x0f\n\x07message\x18\x01 \x01(\t\"\x05\n\x03Out2+\n\x0e\x41nalystService\x12\x19\n\x07\x41nalyse\x12\x06.Enter\x1a\x04.Out\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x14\x41nalystService.proto\"\x18\n\x05\x45nter\x12\x0f\n\x07message\x18\x01 \x03(\x02\"\x05\n\x03Out2+\n\x0e\x41nalystService\x12\x19\n\x07\x41nalyse\x12\x06.Enter\x1a\x04.Out\"\x00\x62\x06proto3'
 )
 
 
@@ -33,8 +33,8 @@ _ENTER = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='message', full_name='Enter.message', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      number=1, type=2, cpp_type=6, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),

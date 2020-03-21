@@ -5,14 +5,10 @@ import logging
 import random
 import string
 import threading
+from clickhouse_driver import Client
 import grpc
 import AnalystService_pb2
 import AnalystService_pb2_grpc
-import test_pb2
-import test_pb2_grpc
-
-
-# import Next Service pb2/pb2_grpc
 
 
 class Listener(AnalystService_pb2_grpc.AnalystServiceServicer):
@@ -21,23 +17,35 @@ class Listener(AnalystService_pb2_grpc.AnalystServiceServicer):
     def __init__(self):
         self.counter = 0
         self.last_print_time = time.time()
+        self.client = Client(host='78.140.223.19', password='12345')
 
     def __str__(self):
         return self.__class__.__name__
 
     def Analyse(self, request, context):
-        print(request.message)
+        data = request.message
+        print('message-', request.message)
 
-        process = Process(request.message)
+        critical_v = self.client.execute('SELECT * FROM test.critical')[0]
 
-        test_pb2_grpc.TestServiceStub(grpc.insecure_channel("localhost:8888")).ping(test_pb2.Ent(mes=process))
-        print('sended!!!')
+        print('criticals- ', critical_v)
+
+        result = []
+        flag = False
+
+        counter = 0
+        for i in range(len(data[:-1])):
+            if data[i] < critical_v[i]:
+                result.append(1)
+                flag = True
+            else:
+                result.append(0)
+        result.append(data[-1])
+
+        if flag:
+            self.client.execute(f'INSERT INTO test.warnings (Pressure, Humidity, TemperatureR, TemperatureA, pH, FlowRate, CO) VALUES ({",".join(result)})')
 
         return AnalystService_pb2.Out()
-
-def Process(inpt):
-    res = "f".join(inpt)
-    return res
 
 
 def serve():
@@ -50,7 +58,7 @@ def serve():
         while True:
             pass
     except KeyboardInterrupt:
-        print("KeyboardInterrupt")
+        print("KeyboardInterrupt  sss")
         server.stop(0)
 
 

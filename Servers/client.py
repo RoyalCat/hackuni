@@ -1,25 +1,28 @@
 import grpc
 import AnalystService_pb2
 import AnalystService_pb2_grpc
+import time
 
 
-def run():
-    with grpc.insecure_channel("localhost:9999") as channel:
-        stub = AnalystService_pb2_grpc.AnalystServiceStub(channel)
-        while True:
-            try:
-                mess = input()
-                stub.Analyse(AnalystService_pb2.Enter(message=str(mess)))
-            except KeyboardInterrupt:
-                print("KeyboardInterrupt")
-                channel.unsubscribe(close)
-                exit()
+def Analyse():
+    data = [3, 1, 5, 4, 5, 6, 7, 2323]
+    print('message-', data)
 
+    critical_v = [2, 2, 2, 2, 2, 2, 2]
 
+    print('criticals- ', critical_v)
 
-def close(channel):
-    channel.close()
+    result = []
+    flag = False
 
+    counter = 0
+    for i in range(len(data[:-1])):
+        if data[i] < critical_v[i]:
+            result.append(1)
+            flag = True
+        else:
+            result.append(0)
+    result.append(data[-1])
+    print(result)
 
-if __name__ == "__main__":
-    run()
+Analyse()
