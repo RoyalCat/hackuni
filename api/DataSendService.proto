@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package grpcSender;
+option go_package = "grpcSender";
+
+message DataRequest {
+    repeated float data = 1;
+}
+
+message DataResponse {
+}
+
+service DataSendService {
+    rpc SendData(DataRequest) returns (DataResponse) {};
+}
