@@ -3,7 +3,6 @@ package dbwriter
 import (
 	"bio/datalistener"
 	"database/sql"
-	"log"
 
 	_ "github.com/mailru/go-clickhouse"
 )
@@ -17,10 +16,10 @@ func GetSession(addres string) *sql.DB {
 	}
 	return connect
 }
-func PasteData(conn *sql.DB, data datalistener.Item) {
+func PasteData(conn *sql.DB, data datalistener.Item) error {
 	tx, err := conn.Begin()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	stmt, err := tx.Prepare(`
 		INSERT INTO test.data (
@@ -37,7 +36,7 @@ func PasteData(conn *sql.DB, data datalistener.Item) {
 		)`)
 
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	if _, err := stmt.Exec(
@@ -50,10 +49,12 @@ func PasteData(conn *sql.DB, data datalistener.Item) {
 		data.CO,
 		data.EventTime.Unix(),
 	); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	if err := tx.Commit(); err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }

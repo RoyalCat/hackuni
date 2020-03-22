@@ -17,15 +17,15 @@ func convertTo32(ar []float64) []float32 {
 	return newar
 }
 
-func GetService(addres string) AnalystServiceClient {
+func GetService(addres string) *grpc.ClientConn {
 
-	cc, err := grpc.Dial(addres, grpc.WithBlock(), grpc.WithInsecure(), grpc.WithTimeout(5*time.Second))
+	cc, err := grpc.Dial(addres, grpc.WithBlock(), grpc.WithInsecure(), grpc.WithTimeout(1*time.Second))
 	if err != nil {
 		println("grpc error")
 		return nil
 	}
 
-	return NewAnalystServiceClient(cc)
+	return cc
 }
 
 func SendData(client AnalystServiceClient, raw []float64) {

@@ -2,8 +2,6 @@ package datalistener
 
 import (
 	"context"
-	"flag"
-	"log"
 	"time"
 
 	"github.com/gopcua/opcua"
@@ -44,14 +42,17 @@ func NilData() Item {
 }
 
 func GetClient(opcEnd string) *opcua.Client {
-	var endpoint = flag.String("endpoint", opcEnd, "OPC UA Endpoint URL")
-	flag.Parse()
-
+	/*
+		var endpointFlag = flag.Lookup("endpoint")
+		if endpointFlag == nil {
+			flag.String("endpoint", opcEnd, "OPC UA Endpoint URL")
+		}
+		flag.Parse()*/
 	ctx := context.Background()
 
-	var c *opcua.Client = opcua.NewClient(*endpoint, opcua.SecurityMode(ua.MessageSecurityModeNone))
+	var c *opcua.Client = opcua.NewClient(opcEnd, opcua.SecurityMode(ua.MessageSecurityModeNone))
 	if err := c.Connect(ctx); err != nil {
-		log.Fatal(err)
+		return nil
 	}
 
 	return c
