@@ -6,16 +6,26 @@ import AnalystService_pb2
 import AnalystService_pb2_grpc
 import telebot
 from telebot import apihelper
+import pickle
 
 bot = telebot.TeleBot('1101313253:AAG-3hK95_Ojk6G1yfj_7ogK5NyPjI2AXUk')
-chatids = []
+try:
+    with open('chatids.ent', 'rb') as file:
+        chatids = pickle.load(file)
+except:
+    chatids = []
+
+
+
 
 proxies = {
-'http': 'http://52.179.231.206:80',
-'https': 'https://167.172.191.252:8118'
+    'http': 'http://64.225.24.13:3128',
+    'https': 'https://64.225.24.13:3128'
 }
 
 apihelper.proxy = proxies
+
+names = ['Pressure', 'Humidity', 'TemperatureR', 'TemperatureA', 'pH', 'FlowRate', 'CO', 'EventTime']
 
 class Listener(AnalystService_pb2_grpc.AnalystServiceServicer):
     """The listener function implemests the rpc call as described in the .proto file"""
@@ -48,11 +58,13 @@ class Listener(AnalystService_pb2_grpc.AnalystServiceServicer):
                 result.append(0)
         result.append(data[-1])
 
+        print('Chats - ', chatids)
+
         if flag:
             self.client.execute(f'INSERT INTO test.warnings (Pressure, Humidity, TemperatureR, TemperatureA, pH, FlowRate, CO, EventTime) VALUES ({",".join(map(str, result))})')
-            names = ['Pressure', 'Humidity', 'TemperatureR', 'TemperatureA', 'pH', 'FlowRate', 'CO', 'EventTime']
             for i in chatids:
-                bot.send_message(i, 'Warning on sensors: ' + ",".join(map(str, [names[j] for j in range(len(names)) if result[i] == 1])))
+                bot.send_message(i, 'Warning on sensors: ' + ",".join(map(str, [names[j] for j in range(len(names)) if result[j] == 1])))
+                print('message sended to ', i)
 
         return AnalystService_pb2.Out()
 
@@ -63,7 +75,7 @@ def serve():
     AnalystService_pb2_grpc.add_AnalystServiceServicer_to_server(Listener(), server)
     server.add_insecure_port("[::]:9999")
     server.start()
-    bot.polling()
+    bot.polling(none_stop=True, interval=0, timeout=20)
     try:
         while True:
             pass
@@ -80,14 +92,24 @@ def start_message(message):
 
 @bot.message_handler(commands=['enable'])
 def enable(message):
-    chatids.append(message.chat.id)
-    bot.send_message(message.chat.id, 'Подписка оформлена')
+    if message.chat.id not in chatids:
+        chatids.append(message.chat.id)
+        with open('chatids.ent', 'wb') as file:
+            pickle.dump(chatids, file)
+        bot.send_message(message.chat.id, 'Подписка оформлена')
+    else:
+        bot.send_message(message.chat.id, 'Подписка уже оформлена')
 
 
 @bot.message_handler(commands=['disable'])
 def disable(message):
-    chatids.remove(message.chat.id)
-    bot.send_message(message.chat.id, 'Подписка отменена')
+    if message.chat.id in chatids:
+        chatids.remove(message.chat.id)
+        with open('chatids.ent', 'wb') as file:
+            pickle.dump(chatids, file)
+        bot.send_message(message.chat.id, 'Подписка отменена')
+    else:
+        bot.send_message(message.chat.id, 'Подписка не найдена')
 
 
 if __name__ == "__main__":
