@@ -13,7 +13,7 @@ import (
 const configfile = "config.json"
 
 type Configuration struct {
-	OpcAddres  string `json:"opcAddres"`
+	OpcAddres  string `json:"OpcAddres"`
 	GrpcAddres string `json:"GrpcAddres"`
 	DbAddres   string `json:"DbAddres"`
 }
@@ -40,24 +40,39 @@ func loadconfig(path string) Configuration {
 }
 
 func updateData(config Configuration) {
+	println("Connecting to opc server...")
 	var client = datalistener.GetClient(config.OpcAddres)
 	defer client.Close()
+	println("Connected")
+
+	println("Connecting to database...")
 	var sess = dbwriter.GetSession(config.DbAddres)
 	defer sess.Close()
-	var grpcService = grpcSender.GetService(config.GrpcAddres)
+	println("Connected")
 
+	println("Connecting to analyser(grpc)...")
+	var grpcService = grpcSender.GetService(config.GrpcAddres)
+	println("Connected")
+
+	println("Running...")
 	for {
 		var data, raw, _ = datalistener.GetData(client)
 		raw = append(raw, float64(data.EventTime.Unix()))
-
-		grpcSender.SendData(grpcService, raw)
-		dbwriter.PasteData(sess, data)
+		if data != datalistener.NilData() {
+			if grpcService != nil {
+				grpcSender.SendData(grpcService, raw)
+			}
+			if sess != nil {
+				dbwriter.PasteData(sess, data)
+			}
+		}
 
 		time.Sleep(1 * time.Second)
 	}
 }
 
 func main() {
+	println("Initialization...")
 	config := loadconfig(configfile)
 	updateData(config)
 }

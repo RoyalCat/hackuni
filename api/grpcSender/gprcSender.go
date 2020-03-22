@@ -2,7 +2,7 @@ package grpcSender
 
 import (
 	context "context"
-	"log"
+	"time"
 
 	grpc "google.golang.org/grpc"
 )
@@ -18,11 +18,11 @@ func convertTo32(ar []float64) []float32 {
 }
 
 func GetService(addres string) AnalystServiceClient {
-	var opts = grpc.WithInsecure()
 
-	cc, err := grpc.Dial(addres, opts)
+	cc, err := grpc.Dial(addres, grpc.WithBlock(), grpc.WithInsecure(), grpc.WithTimeout(5*time.Second))
 	if err != nil {
-		log.Fatal(err)
+		println("grpc error")
+		return nil
 	}
 
 	return NewAnalystServiceClient(cc)

@@ -11,7 +11,9 @@ import (
 func GetSession(addres string) *sql.DB {
 	connect, err := sql.Open("clickhouse", addres)
 	if err != nil {
-		log.Fatal(err)
+		print("db error")
+		//log.Fatal(err)
+		return nil
 	}
 	return connect
 }
