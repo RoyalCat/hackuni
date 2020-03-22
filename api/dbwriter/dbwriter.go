@@ -8,8 +8,8 @@ import (
 	_ "github.com/mailru/go-clickhouse"
 )
 
-func GetSession() *sql.DB {
-	connect, err := sql.Open("clickhouse", "http://default:12345@78.140.223.19:8123")
+func GetSession(addres string) *sql.DB {
+	connect, err := sql.Open("clickhouse", addres)
 	if err != nil {
 		log.Fatal(err)
 	}

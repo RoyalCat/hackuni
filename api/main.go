@@ -4,22 +4,47 @@ import (
 	"bio/datalistener"
 	"bio/dbwriter"
 	"bio/grpcSender"
+	"encoding/json"
+	"log"
+	"os"
 	"time"
 )
 
-const (
-	opcAddres                = "opc.tcp://127.0.0.99:48400"
-	defaultPort              = "8080"
-	defaultRoutingServiceURL = "http://localhost:7878"
-	grpcAddres               = "localhost:9999"
-)
+const configfile = "config.json"
 
-func updateData() {
-	var client = datalistener.GetClient(opcAddres)
+type Configuration struct {
+	OpcAddres  string `json:"opcAddres"`
+	GrpcAddres string `json:"GrpcAddres"`
+	DbAddres   string `json:"DbAddres"`
+}
+
+func loadconfig(path string) Configuration {
+	config := Configuration{}
+
+	file, err := os.Open(path)
+	defer file.Close()
+	if err != nil {
+		log.Fatal("Config error ", err.Error())
+	}
+
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&config)
+	if err != nil {
+		log.Fatal("Config error ", err.Error())
+	}
+	if config.DbAddres == "" || config.GrpcAddres == "" || config.OpcAddres == "" {
+		log.Fatal("Config value error")
+	}
+
+	return config
+}
+
+func updateData(config Configuration) {
+	var client = datalistener.GetClient(config.OpcAddres)
 	defer client.Close()
-	var sess = dbwriter.GetSession()
+	var sess = dbwriter.GetSession(config.DbAddres)
 	defer sess.Close()
-	var grpcService = grpcSender.GetService(grpcAddres)
+	var grpcService = grpcSender.GetService(config.GrpcAddres)
 
 	for {
 		var data, raw, _ = datalistener.GetData(client)
@@ -33,7 +58,6 @@ func updateData() {
 }
 
 func main() {
-	go updateData()
-	for {
-	}
+	config := loadconfig(configfile)
+	updateData(config)
 }
