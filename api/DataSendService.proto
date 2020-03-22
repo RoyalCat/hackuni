@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "grpcSender";
+
+service AnalystService {
+    //an example of getting a feature
+    rpc Analyse (Enter) returns (Out) {}
+}
+
+message Enter {
+    //The Ping message
+    repeated float message = 1;
+}
+
+message Out {
+
+}

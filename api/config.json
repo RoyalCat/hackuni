@@ -1,0 +1,5 @@
+{
+    "OpcAddres": "opc.tcp://127.0.0.99:48400",
+	"GrpcAddres": "localhost:9999",
+	"DbAddres": "http://default:12345@78.140.223.19:8123"
+}

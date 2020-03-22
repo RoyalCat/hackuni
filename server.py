@@ -43,7 +43,7 @@ while True:
         print(str(var[1]) + " set to " + str(var[1].get_data_value().Value.Value))
 
     try:
-        time.sleep(10)
+        time.sleep(1)
     except:
         break
    
